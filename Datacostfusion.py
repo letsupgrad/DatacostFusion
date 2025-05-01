@@ -1207,7 +1207,7 @@ import numpy as np
 # Load your dataset
 # Replace 'your_dataset.csv' with the actual file path or URL of your dataset
 # Make sure your dataset has a column named 'pv_cum'
-df = pd.read_csv("C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising.campaigns.result.csv")
+df = pd.read_csv("Advertising.campaigns.result.csv")
 
 # Streamlit app
 st.title('Nested Model for Predicting Ad Clicks')
