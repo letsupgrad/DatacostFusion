@@ -1,0 +1,14 @@
+
+
+streamlit
+pandas
+numpy
+matplotlib
+Pillow
+seaborn
+scikit-learn
+yfinance
+scipy
+altair
+plotly
+pydeck
