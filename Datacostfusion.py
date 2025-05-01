@@ -1941,9 +1941,8 @@ def sma_crossover_strategy_page():
     # --- User Inputs ---
     st.sidebar.header("SMA Strategy Inputs")
     ticker = st.sidebar.text_input("Stock Ticker Symbol:", "AAPL", key='sma_ticker')
-    default_start = datetime.today() - timedelta(days=5*365) # Default 5 years back
-    start_date_sma = st.sidebar.date_input("Select Start Date:", default_start, key='sma_start')
-    end_date_sma = st.sidebar.date_input("Select End Date:", datetime.today().date(), key='sma_end')
+    start_date_sma = st.sidebar.date_input("Select Start Date:", datetime(2021, 1, 1).date(), key='sma_start')
+    end_date_sma = st.sidebar.date_input("Select End Date:", datetime(2025, 1, 1).date(), key='sma_end')
     short_window = st.sidebar.slider("Short Window (days):", 10, 100, 50, 5, key='sma_short')
     long_window = st.sidebar.slider("Long Window (days):", 50, 250, 200, 10, key='sma_long')
 
@@ -1951,39 +1950,40 @@ def sma_crossover_strategy_page():
         st.sidebar.warning("Short window should be less than long window.")
         return
 
+    if start_date_sma >= end_date_sma:
+        st.sidebar.warning("Start date must be before end date.")
+        return
+
     # --- Data Fetching ---
     st.subheader(f"Fetching Data for: {ticker}")
+    st.write(f"Date Range: {start_date_sma} to {end_date_sma}")
+
     try:
-        # @st.cache_data # Cache fetched data
         def get_stock_data(ticker, start, end):
             return yf.download(ticker, start=start, end=end)
 
         stock_data = get_stock_data(ticker, start_date_sma, end_date_sma)
 
         if stock_data.empty:
-            st.error(f"Could not fetch data for {ticker}. Check the ticker symbol and date range.")
+            st.error(f"No data returned for {ticker}. Check the ticker symbol and date range.")
             return
 
         st.subheader("Historical Stock Price Data")
-        st.dataframe(stock_data.tail()) # Show tail
+        st.dataframe(stock_data.tail())
 
         # --- Strategy Calculation ---
         signals = pd.DataFrame(index=stock_data.index)
-        signals['Close'] = stock_data['Close'] # Keep close price for reference
+        signals['Close'] = stock_data['Close']
         signals['signal'] = 0.0
 
-        # Create short simple moving average
         signals['short_mavg'] = stock_data['Close'].rolling(window=short_window, min_periods=1).mean()
-        # Create long simple moving average
         signals['long_mavg'] = stock_data['Close'].rolling(window=long_window, min_periods=1).mean()
 
-        # Create signals based on crossover
-        # Generate '1' when short > long (buy signal), '0' otherwise
-        signals['signal'][short_window:] = np.where(signals['short_mavg'][short_window:] > signals['long_mavg'][short_window:], 1.0, 0.0)
+        # Safe assignment using .loc to avoid SettingWithCopyWarning
+        signals.loc[signals.index[short_window:], 'signal'] = np.where(
+            signals['short_mavg'][short_window:] > signals['long_mavg'][short_window:], 1.0, 0.0
+        )
 
-        # Calculate the difference in signals to generate trading orders
-        # 1 indicates a buy (signal changes from 0 to 1)
-        # -1 indicates a sell (signal changes from 1 to 0)
         signals['positions'] = signals['signal'].diff()
 
         st.subheader("Strategy Signals and Moving Averages")
@@ -1992,22 +1992,14 @@ def sma_crossover_strategy_page():
         # --- Visualization ---
         st.subheader("Stock Price with SMA and Trading Signals")
 
-        # Create figure
         fig = go.Figure()
-
-        # Add stock closing price trace
         fig.add_trace(go.Scatter(x=signals.index, y=signals['Close'], mode='lines', name='Close Price', line=dict(color='skyblue')))
-
-        # Add moving averages
         fig.add_trace(go.Scatter(x=signals.index, y=signals['short_mavg'], mode='lines', name=f'SMA {short_window}', line=dict(color='orange')))
         fig.add_trace(go.Scatter(x=signals.index, y=signals['long_mavg'], mode='lines', name=f'SMA {long_window}', line=dict(color='purple')))
 
-        # Add 'Buy' signals
         buy_signals = signals[signals['positions'] == 1.0]
         fig.add_trace(go.Scatter(x=buy_signals.index, y=buy_signals['short_mavg'],
                                  mode='markers', name='Buy Signal', marker=dict(color='green', size=10, symbol='triangle-up')))
-
-        # Add 'Sell' signals
         sell_signals = signals[signals['positions'] == -1.0]
         fig.add_trace(go.Scatter(x=sell_signals.index, y=sell_signals['short_mavg'],
                                  mode='markers', name='Sell Signal', marker=dict(color='red', size=10, symbol='triangle-down')))
@@ -2017,13 +2009,15 @@ def sma_crossover_strategy_page():
             xaxis_title='Date',
             yaxis_title='Price',
             legend_title='Legend',
-            template='plotly_white' # Use a clean template
+            template='plotly_white'
         )
+
         st.plotly_chart(fig, use_container_width=True)
 
     except Exception as e:
-        st.error(f"An error occurred: {e}")
+        st.error("An unexpected error occurred while processing the data.")
         st.exception(e)
+
 
 
 def campaign_analysis_pie_page():
