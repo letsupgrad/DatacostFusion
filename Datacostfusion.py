@@ -143,7 +143,8 @@ def home_page():
 
     image = load_image(DEFAULT_IMAGE_PATH)
     if image:
-        st.image(image, use_column_width=True)
+        st.image(image, use_container_width=True)  # Updated here
+
 
 def retention_calculator_page():
     """Page 1: Campaign Customer Retention Calculator."""
