@@ -1154,7 +1154,8 @@ def campaign_forecasting_budget_page():
         'Date': campaign_dates,
         'Forecasted Budget ($)': forecasted_budgets
     })
-    df_forecast['Date'] = df_forecast['Date'].dt.strftime('%Y-%m-%d') # Format for display
+    df_forecast['Date'] = pd.to_datetime(df_forecast['Date']).dt.strftime('%Y-%m-%d')
+
     st.dataframe(df_forecast)
 
     # Visualization
