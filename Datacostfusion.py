@@ -19,7 +19,7 @@ def page1():
 
   
 
-image = Image.open('C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Website-image-advertising-1024x640.jpg')
+image = Image.open('Website-image-advertising-1024x640.jpg')
 
 
 # Set page layout
@@ -105,9 +105,9 @@ def rename_duplicates(df):
 def main():
     st.title('Data Fusion')
 
-    df1 = pd.read_csv("C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising Budget and Sales.csv")
-    df2 = pd.read_csv("C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\advertising.csv")
-    df3 = pd.read_csv("C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising_Data.csv")
+    df1 = pd.read_csv("Advertising Budget and Sales.csv")
+    df2 = pd.read_csv("advertising.csv")
+    df3 = pd.read_csv("Advertising_Data.csv")
 
     # Perform data fusion
     df_fused = pd.concat([df1, df2, df3])
@@ -164,7 +164,7 @@ if __name__ == "__main__":
     main()
 
 # Load the dataset
-dataset_path = "C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising Budget and Sales.csv"
+dataset_path = "Advertising Budget and Sales.csv"
 df = pd.read_csv(dataset_path)
 
 # Streamlit app
@@ -265,9 +265,9 @@ def optimize_advertisement_cost(df):
 def main():
     st.title('Data Fusion and Advertising Optimization')
 
-    df1 = pd.read_csv("C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising Budget and Sales.csv")
-    df2 = pd.read_csv("C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\advertising.csv")
-    df3 = pd.read_csv("C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising_Data.csv")
+    df1 = pd.read_csv("Advertising Budget and Sales.csv")
+    df2 = pd.read_csv("advertising.csv")
+    df3 = pd.read_csv("Advertising_Data.csv")
 
     # Perform data fusion and clustering
     num_clusters = st.slider("Choose the number of clusters", key="clusters", min_value=2, max_value=10, value=3)
@@ -308,7 +308,7 @@ def main():
     st.title("Advertising Budget and Sales Data Optimization")
 
     # Load data
-    file_path = "C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising Budget and Sales.csv"
+    file_path = "Advertising Budget and Sales.csv"
     df = pd.read_csv(file_path)
 
     # Show original data
@@ -748,7 +748,7 @@ def main():
     st.title('5-Year Prediction Multiline Chart')
 
     # Load your dataset (replace with the actual path)
-    dataset_path = "C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising.campaigns.result.csv"
+    dataset_path = "Advertising.campaigns.result.csv"
     df = pd.read_csv(dataset_path)
 
     # Convert 'date' column to datetime if it's not already
@@ -803,7 +803,7 @@ import streamlit as st
 import pandas as pd
 
 # Load the dataset
-dataset_path = "C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising.campaigns.result.csv"
+dataset_path = "Advertising.campaigns.result.csv"
 df = pd.read_csv(dataset_path)
 
 # Function to create a campaign
@@ -873,7 +873,7 @@ if __name__ == "__main__":
     main()
 
 # Load the dataset
-dataset_path = "C:\\Users\\DELL\\M.TECH PROJECT WITH FILE\\Advertising.campaigns.result.csv"
+dataset_path = "Advertising.campaigns.result.csv"
 df = pd.read_csv(dataset_path)
 
 # Function to suggest increasing production
