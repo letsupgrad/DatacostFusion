@@ -28,7 +28,7 @@ st.set_page_config(layout="wide", page_title="Datacost Fusion System")
 # --- Global Variables & Helper Functions ---
 
 # WARNING: Hardcoded file paths. Replace with relative paths or st.file_uploader.
-DEFAULT_IMAGE_PATH = 'Website-image-advertising-1024x640.jpg'
+DEFAULT_IMAGE_PATH = '3653777-hd_1280_720_30fps.mp4'
 AD_BUDGET_SALES_CSV = "Advertising Budget and Sales.csv"
 ADVERTISING_CSV = "advertising.csv"
 ADVERTISING_DATA_CSV = "Advertising_Data.csv"
