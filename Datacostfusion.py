@@ -2428,9 +2428,10 @@ def supply_chain_ad_dashboard_page():
         inventory_df['Status'] = np.where(inventory_df['Inventory_Level'] < inventory_df['Reorder_Point'], 'Below Reorder', 'OK')
         ad_campaign_df['Cost Per Conversion ($)'] = (ad_campaign_df['Spend ($)'] / ad_campaign_df['Conversions']).round(2)
 
-        return inventory_df, production_df, supplier_performance_df, ad_campaign_df
+        return inventory_df, production_df, supplier_performance_df, ad_campaign_df, suppliers
 
-    inventory_df, production_df, supplier_performance_df, ad_campaign_df = generate_supply_ad_data()
+    inventory_df, production_df, supplier_performance_df, ad_campaign_df, suppliers = generate_supply_ad_data()
+
 
     # --- Dashboard Display ---
     st.sidebar.header("Dashboard Options")
