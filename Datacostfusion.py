@@ -2393,13 +2393,14 @@ def supply_chain_ad_dashboard_page():
     # --- Sample Data Generation ---
     @st.cache_data
     def generate_supply_ad_data():
-        np.random.seed(42)
-        products = ['Widget A', 'Gadget B', 'Thingamajig C']
-        inventory_data = {
-            'Product': products,
-            'Inventory_Level': np.random.randint(50, 500, 3),
-            'Reorder_Point': np.random.randint(50, 150, 3)
-        }
+    np.random.seed(42)
+    products = ['Widget A', 'Gadget B', 'Thingamajig C']
+    suppliers = ['Supplier X', 'Supplier Y', 'Supplier Z', 'Supplier W']  # Move this above
+
+    inventory_data = {
+        'Product': products,
+        'Inventory_Level': np.random.randint(50, 500, 3),
+        'Reorder_Point': np.random.randint(50, 150, 3)
         production_data = {
             'Product': products,
             'Production_Status': np.random.choice(['On Track', 'Delayed', 'Completed', 'Planning'], 3, replace=False),
