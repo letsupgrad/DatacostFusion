@@ -2386,141 +2386,122 @@ def audience_segmentation_personalization_page():
         st.dataframe(df_aud[df_aud['Segment'] == selected_segment_pers].head())
 
 
-import streamlit as st
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
-import plotly.express as px
+def supply_chain_ad_dashboard_page():
+    st.title("Supply Chain & Ad Campaign Dashboard (Demo)")
+    st.info("Displays multiple sample dataframes related to supply chain ops and ad campaigns. Includes placeholder functions for advanced features.")
 
-# --- Page Config ---
-st.set_page_config(page_title="Supply Chain & Ad Campaign Dashboard", layout="wide")
+    # --- Sample Data Generation ---
+    @st.cache_data
+    def generate_supply_ad_data():
+        np.random.seed(42)
+        products = ['Widget A', 'Gadget B', 'Thingamajig C']
+        inventory_data = {
+            'Product': products,
+            'Inventory_Level': np.random.randint(50, 500, 3),
+            'Reorder_Point': np.random.randint(50, 150, 3)
+        }
+        production_data = {
+            'Product': products,
+            'Production_Status': np.random.choice(['On Track', 'Delayed', 'Completed', 'Planning'], 3, replace=False),
+            'Est_Completion': [datetime.today().date() + timedelta(days=np.random.randint(5,30)) for _ in range(3)]
+        }
+        suppliers = ['Supplier X', 'Supplier Y', 'Supplier Z', 'Supplier W']
+        supplier_performance_data = {
+            'Supplier': suppliers,
+            'OnTime_Delivery (%)': np.random.randint(80, 100, 4),
+            'Quality_Rating (1-5)': np.random.uniform(3.5, 5.0, 4).round(1)
+        }
+        campaigns = ['Spring Sale', 'Summer Promo', 'Q4 Push']
+        ad_campaign_data = {
+            'Campaign': campaigns,
+            'Status': np.random.choice(['Active', 'Planning', 'Completed'], 3, replace=False),
+            'Spend ($)': np.random.randint(2000, 10000, 3),
+            'Conversions': np.random.randint(50, 300, 3)
+        }
 
-# --- Data Generation Function ---
-def generate_supply_ad_data():
-    np.random.seed(42)
-    products = ['Widget A', 'Gadget B', 'Thingamajig C']
-    suppliers = ['Supplier X', 'Supplier Y', 'Supplier Z', 'Supplier W']
+        inventory_df = pd.DataFrame(inventory_data)
+        production_df = pd.DataFrame(production_data)
+        supplier_performance_df = pd.DataFrame(supplier_performance_data)
+        ad_campaign_df = pd.DataFrame(ad_campaign_data)
 
-    inventory_data = {
-        'Product': products,
-        'Inventory_Level': np.random.randint(50, 500, 3),
-        'Reorder_Point': np.random.randint(50, 150, 3)
-    }
+        # Add simple calculated fields
+        inventory_df['Status'] = np.where(inventory_df['Inventory_Level'] < inventory_df['Reorder_Point'], 'Below Reorder', 'OK')
+        ad_campaign_df['Cost Per Conversion ($)'] = (ad_campaign_df['Spend ($)'] / ad_campaign_df['Conversions']).round(2)
 
-    production_data = {
-        'Product': products,
-        'Production_Status': np.random.choice(['On Track', 'Delayed', 'Completed', 'Planning'], 3, replace=False),
-        'Est_Completion': [datetime.today().date() + timedelta(days=np.random.randint(5, 30)) for _ in range(3)]
-    }
+        return inventory_df, production_df, supplier_performance_df, ad_campaign_df
 
-    supplier_performance_data = {
-        'Supplier': suppliers,
-        'OnTime_Delivery (%)': np.random.randint(80, 100, 4),
-        'Quality_Rating (1-5)': np.random.uniform(3.5, 5.0, 4).round(1)
-    }
+    inventory_df, production_df, supplier_performance_df, ad_campaign_df = generate_supply_ad_data()
 
-    campaigns = ['Spring Sale', 'Summer Promo', 'Q4 Push']
-    ad_campaign_data = {
-        'Campaign': campaigns,
-        'Status': np.random.choice(['Active', 'Planning', 'Completed'], 3, replace=False),
-        'Spend ($)': np.random.randint(2000, 10000, 3),
-        'Conversions': np.random.randint(50, 300, 3)
-    }
+    # --- Dashboard Display ---
+    st.sidebar.header("Dashboard Options")
+    option = st.sidebar.radio("Select Dashboard Section",
+                              ["Real-time Monitoring",
+                               "Trigger Alerts (Placeholder)",
+                               "Scenario Analysis (Placeholder)",
+                               "Continuous Improvement (Placeholder)"], key='sc_option')
 
-    inventory_df = pd.DataFrame(inventory_data)
-    production_df = pd.DataFrame(production_data)
-    supplier_performance_df = pd.DataFrame(supplier_performance_data)
-    ad_campaign_df = pd.DataFrame(ad_campaign_data)
+    if option == "Real-time Monitoring":
+        st.header("Real-time Monitoring")
 
-    # Add calculated fields
-    inventory_df['Status'] = np.where(inventory_df['Inventory_Level'] < inventory_df['Reorder_Point'], 'Below Reorder', 'OK')
-    ad_campaign_df['Cost Per Conversion ($)'] = (ad_campaign_df['Spend ($)'] / ad_campaign_df['Conversions']).round(2)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Inventory Levels")
+            st.dataframe(inventory_df)
+            low_inventory = inventory_df[inventory_df['Status'] == 'Below Reorder']
+            if not low_inventory.empty:
+                st.warning(f"Low Inventory Alert: {', '.join(low_inventory['Product'].tolist())}")
 
-    return inventory_df, production_df, supplier_performance_df, ad_campaign_df, suppliers
+            st.subheader("Production Status")
+            st.dataframe(production_df)
+            delayed_production = production_df[production_df['Production_Status'] == 'Delayed']
+            if not delayed_production.empty:
+                st.error(f"Production Delayed: {', '.join(delayed_production['Product'].tolist())}")
 
-# --- Load Data ---
-inventory_df, production_df, supplier_perf_df, ad_campaign_df, suppliers = generate_supply_ad_data()
-
-# --- App Title ---
-st.title("📊 Supply Chain & Advertising Dashboard (2021–2025 Demo)")
-
-# --- Tabs ---
-tab1, tab2, tab3, tab4 = st.tabs(["Inventory & Production", "Supplier Performance", "Ad Campaigns", "Scenario Analysis"])
-
-# --- Inventory & Production Tab ---
-with tab1:
-    st.subheader("📦 Inventory Levels")
-    st.dataframe(inventory_df)
-    st.bar_chart(inventory_df.set_index("Product")[["Inventory_Level", "Reorder_Point"]])
-
-    st.subheader("🏭 Production Status")
-    st.dataframe(production_df)
-
-# --- Supplier Tab ---
-with tab2:
-    st.subheader("🚚 Supplier Performance Metrics")
-    st.dataframe(supplier_perf_df)
-
-    st.subheader("Quality vs On-Time Delivery")
-    fig = px.scatter(
-        supplier_perf_df,
-        x='OnTime_Delivery (%)',
-        y='Quality_Rating (1-5)',
-        color='Supplier',
-        size='Quality_Rating (1-5)',
-        title="Supplier Performance Scatter Plot"
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-# --- Ad Campaign Tab ---
-with tab3:
-    st.subheader("📣 Advertising Campaign Results")
-    st.dataframe(ad_campaign_df)
-
-    st.subheader("Campaign Spend vs Conversions")
-    fig = px.bar(
-        ad_campaign_df,
-        x="Campaign",
-        y="Spend ($)",
-        color="Status",
-        hover_data=["Conversions", "Cost Per Conversion ($)"]
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-# --- Scenario Analysis ---
-with tab4:
-    st.subheader("🔍 Scenario Analysis")
-
-    supplier_outage = st.selectbox("Simulate Supplier Outage:", ['None'] + suppliers)
-
-    if supplier_outage != 'None':
-        st.warning(f"⚠️ You selected a simulated outage for **{supplier_outage}**.")
-
-        # Simulate a performance drop
-        modified_perf = supplier_perf_df.copy()
-        modified_perf.loc[modified_perf['Supplier'] == supplier_outage, 'OnTime_Delivery (%)'] -= 30
-        modified_perf.loc[modified_perf['Supplier'] == supplier_outage, 'Quality_Rating (1-5)'] -= 1.5
-        modified_perf['OnTime_Delivery (%)'] = modified_perf['OnTime_Delivery (%)'].clip(lower=0)
-        modified_perf['Quality_Rating (1-5)'] = modified_perf['Quality_Rating (1-5)'].clip(lower=1.0)
-
-        st.subheader("Modified Supplier Performance")
-        st.dataframe(modified_perf)
-
-        st.subheader("Impact Visualization")
-        fig = px.scatter(
-            modified_perf,
-            x='OnTime_Delivery (%)',
-            y='Quality_Rating (1-5)',
-            color='Supplier',
-            size='Quality_Rating (1-5)',
-            title="Supplier Performance After Outage"
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    else:
-        st.info("Select a supplier to simulate a potential disruption scenario.")
+        with col2:
+            st.subheader("Supplier Performance")
+            st.dataframe(supplier_performance_df)
+            low_perf_suppliers = supplier_performance_df[
+                (supplier_performance_df['OnTime_Delivery (%)'] < 85) |
+                (supplier_performance_df['Quality_Rating (1-5)'] < 4.0)
+            ]
+            if not low_perf_suppliers.empty:
+                st.warning(f"Check Supplier Performance: {', '.join(low_perf_suppliers['Supplier'].tolist())}")
 
 
+            st.subheader("Ad Campaign Summary")
+            st.dataframe(ad_campaign_df)
+            active_campaigns = ad_campaign_df[ad_campaign_df['Status'] == 'Active']
+            if not active_campaigns.empty:
+                st.info(f"Active Campaigns: {', '.join(active_campaigns['Campaign'].tolist())}")
 
+
+    elif option == "Trigger Alerts (Placeholder)":
+        st.header("Trigger Alerts")
+        st.info("This section would contain logic to automatically trigger alerts (e.g., email, notification) based on predefined conditions (like low inventory, delayed production, poor supplier performance, low campaign ROI). Implementation requires external services or more complex Streamlit features.")
+        st.write("**Example Conditions:**")
+        st.write("- Inventory Level < Reorder Point for > 2 days")
+        st.write("- Production Status = 'Delayed'")
+        st.write("- Supplier On-Time Delivery < 80%")
+        st.write("- Active Ad Campaign ROI < 1.0")
+
+    elif option == "Scenario Analysis (Placeholder)":
+        st.header("Scenario Analysis ('What-If')")
+        st.info("This section would allow users to simulate different scenarios. For example: 'What if demand increases by 20%?' or 'What if Supplier Y is unavailable?' Requires underlying simulation models.")
+        st.write("**Example Scenarios:**")
+        demand_increase = st.slider("Simulate Demand Increase (%):", 0, 100, 10, key='sc_demand_scen')
+        st.write(f"-> Run simulation to see impact on inventory and production with {demand_increase}% higher demand.")
+        supplier_outage = st.selectbox("Simulate Supplier Outage:", ['None'] + suppliers, key='sc_supplier_scen')
+        if supplier_outage != 'None':
+            st.write(f"-> Run simulation to see impact on production and costs if {supplier_outage} is unavailable.")
+
+    elif option == "Continuous Improvement (Placeholder)":
+        st.header("Continuous Improvement")
+        st.info("This section would focus on analyzing historical data and simulation results to identify areas for improvement in the supply chain and ad strategies. It could involve comparing different strategies or tracking KPIs over time.")
+        st.write("**Example Analyses:**")
+        st.write("- Compare historical cost per conversion across different ad campaigns.")
+        st.write("- Analyze lead times for different suppliers.")
+        st.write("- Track inventory turnover ratios.")
+        st.write("- Evaluate the effectiveness of past production schedule adjustments.")
 def demand_forecasting_page():
     st.title("Advertisement Demand Forecasting Tool (Demo)")
     st.info("Uses sample data and Linear Regression to forecast 'Sales' based on various factors.")
