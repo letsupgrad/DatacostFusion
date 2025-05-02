@@ -3617,6 +3617,6 @@ page_function = PAGES[selection]
 page_function()
 
 st.sidebar.markdown("---")
-st.sidebar.info("Datacost Fusion System - M.Tech Project")
+st.sidebar.info("Datacost Fusion System - M.Tech Datascience Project|Developed Sangita Biswas")
 
 
