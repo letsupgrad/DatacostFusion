@@ -34,7 +34,7 @@ ADVERTISING_CSV = "advertising.csv"
 ADVERTISING_DATA_CSV = "Advertising_Data.csv"
 CAMPAIGN_RESULTS_CSV = "Advertising.campaigns.result.csv"
 # WARNING: Hardcoded video paths. Replace with accessible URLs or relative paths if videos are local.
-ICE_CREAM_VIDEO_PATH = "https://www.pexels.com/video/video-of-person-picking-up-popsicle-ice-cream-4725766/"
+ICE_CREAM_VIDEO_PATH = ""
 FOOD_VIDEO_PATH = "6183107-hd_1920_1080_30fps.mp4"
 
 
