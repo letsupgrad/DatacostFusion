@@ -35,7 +35,7 @@ ADVERTISING_DATA_CSV = "Advertising_Data.csv"
 CAMPAIGN_RESULTS_CSV = "Advertising.campaigns.result.csv"
 # WARNING: Hardcoded video paths. Replace with accessible URLs or relative paths if videos are local.
 ICE_CREAM_VIDEO_PATH = "13525415_1080_1920_30fps.mp4"
-FOOD_VIDEO_PATH = "10200314-hd_2160_3840_25fps.mp4"
+FOOD_VIDEO_PATH = "6183107-hd_1920_1080_30fps.mp4"
 
 
 def load_image(image_path):
