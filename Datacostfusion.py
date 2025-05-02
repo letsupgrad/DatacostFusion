@@ -145,9 +145,9 @@ def home_page():
     st.write("Welcome to the Datacost Fusion System! This platform enables seamless integration and analysis of diverse data sources to drive insights and decision-making.")
     st.write("Please explore the various features and functionalities available using the sidebar navigation.")
 
-    image = load_image(DEFAULT_IMAGE_PATH)
+    Video_path = load_image(DEFAULT_VIDEO_PATH)
     if image:
-        st.image(image, use_container_width=True)  # Updated here
+        st.image(Video_path, use_container_width=True)  # Updated here
 
 
 def retention_calculator_page():
