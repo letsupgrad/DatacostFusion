@@ -28,7 +28,7 @@ st.set_page_config(layout="wide", page_title="Datacost Fusion System")
 # --- Global Variables & Helper Functions ---
 
 # WARNING: Hardcoded file paths. Replace with relative paths or st.file_uploader.
-DEFAULT_IMAGE_PATH = '3653777-hd_1280_720_30fps.mp4'
+DEFAULT_VIDEO_PATH = '3653777-hd_1280_720_30fps.mp4'
 AD_BUDGET_SALES_CSV = "Advertising Budget and Sales.csv"
 ADVERTISING_CSV = "advertising.csv"
 ADVERTISING_DATA_CSV = "Advertising_Data.csv"
@@ -38,16 +38,20 @@ ICE_CREAM_VIDEO_PATH = "13525415_1080_1920_30fps.mp4"
 FOOD_VIDEO_PATH = "6183107-hd_1920_1080_30fps.mp4"
 
 
-def load_image(image_path):
+def load_video(video_path):
+    """Safely returns a video file buffer or path for Streamlit to display."""
     try:
-        image = Image.open(image_path)
-        return image
+        # Load video from file path
+        with open(video_path, 'rb') as video_file:
+            video_bytes = video_file.read()
+            return video_bytes
     except FileNotFoundError:
-        st.error(f"Error: Image file not found at {image_path}. Please check the path.")
+        st.error(f"Video file not found: {video_path}")
         return None
     except Exception as e:
-        st.error(f"Error loading image: {e}")
+        st.error(f"Error loading video: {e}")
         return None
+
 
 def load_csv(file_path):
     try:
