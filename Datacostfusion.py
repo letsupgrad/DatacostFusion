@@ -145,9 +145,10 @@ def home_page():
     st.write("Welcome to the Datacost Fusion System! This platform enables seamless integration and analysis of diverse data sources to drive insights and decision-making.")
     st.write("Please explore the various features and functionalities available using the sidebar navigation.")
 
-    Video_path = load_image(DEFAULT_VIDEO_PATH)
-    if image:
-        st.image(Video_path, use_container_width=True)  # Updated here
+    video_data = load_video(DEFAULT_VIDEO_PATH)  # Corrected function and variable name
+    if video_data:
+        st.video(video_data, format="video/mp4")  # Use st.video, not st.image
+
 
 
 def retention_calculator_page():
