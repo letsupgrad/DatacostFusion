@@ -2386,13 +2386,7 @@ def audience_segmentation_personalization_page():
         st.dataframe(df_aud[df_aud['Segment'] == selected_segment_pers].head())
 
 
-def supply_chain_ad_dashboard_page():
-    st.title("Supply Chain & Ad Campaign Dashboard (Demo)")
-    st.info("Displays multiple sample dataframes related to supply chain ops and ad campaigns. Includes placeholder functions for advanced features.")
-
-    # --- Sample Data Generation ---
-    @st.cache_data
-    def generate_supply_ad_data():
+def generate_supply_ad_data():
     np.random.seed(42)
     products = ['Widget A', 'Gadget B', 'Thingamajig C']
     suppliers = ['Supplier X', 'Supplier Y', 'Supplier Z', 'Supplier W']  # Move this above
@@ -2401,37 +2395,37 @@ def supply_chain_ad_dashboard_page():
         'Product': products,
         'Inventory_Level': np.random.randint(50, 500, 3),
         'Reorder_Point': np.random.randint(50, 150, 3)
-        production_data = {
-            'Product': products,
-            'Production_Status': np.random.choice(['On Track', 'Delayed', 'Completed', 'Planning'], 3, replace=False),
-            'Est_Completion': [datetime.today().date() + timedelta(days=np.random.randint(5,30)) for _ in range(3)]
-        }
-        suppliers = ['Supplier X', 'Supplier Y', 'Supplier Z', 'Supplier W']
-        supplier_performance_data = {
-            'Supplier': suppliers,
-            'OnTime_Delivery (%)': np.random.randint(80, 100, 4),
-            'Quality_Rating (1-5)': np.random.uniform(3.5, 5.0, 4).round(1)
-        }
-        campaigns = ['Spring Sale', 'Summer Promo', 'Q4 Push']
-        ad_campaign_data = {
-            'Campaign': campaigns,
-            'Status': np.random.choice(['Active', 'Planning', 'Completed'], 3, replace=False),
-            'Spend ($)': np.random.randint(2000, 10000, 3),
-            'Conversions': np.random.randint(50, 300, 3)
-        }
+    }
+    production_data = {
+        'Product': products,
+        'Production_Status': np.random.choice(['On Track', 'Delayed', 'Completed', 'Planning'], 3, replace=False),
+        'Est_Completion': [datetime.today().date() + timedelta(days=np.random.randint(5,30)) for _ in range(3)]
+    }
+    supplier_performance_data = {
+        'Supplier': suppliers,
+        'OnTime_Delivery (%)': np.random.randint(80, 100, 4),
+        'Quality_Rating (1-5)': np.random.uniform(3.5, 5.0, 4).round(1)
+    }
+    campaigns = ['Spring Sale', 'Summer Promo', 'Q4 Push']
+    ad_campaign_data = {
+        'Campaign': campaigns,
+        'Status': np.random.choice(['Active', 'Planning', 'Completed'], 3, replace=False),
+        'Spend ($)': np.random.randint(2000, 10000, 3),
+        'Conversions': np.random.randint(50, 300, 3)
+    }
 
-        inventory_df = pd.DataFrame(inventory_data)
-        production_df = pd.DataFrame(production_data)
-        supplier_performance_df = pd.DataFrame(supplier_performance_data)
-        ad_campaign_df = pd.DataFrame(ad_campaign_data)
+    inventory_df = pd.DataFrame(inventory_data)
+    production_df = pd.DataFrame(production_data)
+    supplier_performance_df = pd.DataFrame(supplier_performance_data)
+    ad_campaign_df = pd.DataFrame(ad_campaign_data)
 
-        # Add simple calculated fields
-        inventory_df['Status'] = np.where(inventory_df['Inventory_Level'] < inventory_df['Reorder_Point'], 'Below Reorder', 'OK')
-        ad_campaign_df['Cost Per Conversion ($)'] = (ad_campaign_df['Spend ($)'] / ad_campaign_df['Conversions']).round(2)
+    # Add calculated fields
+    inventory_df['Status'] = np.where(inventory_df['Inventory_Level'] < inventory_df['Reorder_Point'], 'Below Reorder', 'OK')
+    ad_campaign_df['Cost Per Conversion ($)'] = (ad_campaign_df['Spend ($)'] / ad_campaign_df['Conversions']).round(2)
 
-        return inventory_df, production_df, supplier_performance_df, ad_campaign_df
+    return inventory_df, production_df, supplier_performance_df, ad_campaign_df, suppliers
 
-    inventory_df, production_df, supplier_performance_df, ad_campaign_df = generate_supply_ad_data()
+inventory_df, production_df, supplier_performance_df, ad_campaign_df = generate_supply_ad_data()
 
     # --- Dashboard Display ---
     st.sidebar.header("Dashboard Options")
