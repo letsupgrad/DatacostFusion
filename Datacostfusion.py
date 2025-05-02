@@ -2425,7 +2425,6 @@ def generate_supply_ad_data():
 
     return inventory_df, production_df, supplier_performance_df, ad_campaign_df, suppliers
 
-inventory_df, production_df, supplier_performance_df, ad_campaign_df = generate_supply_ad_data()
 
     # --- Dashboard Display ---
     st.sidebar.header("Dashboard Options")
